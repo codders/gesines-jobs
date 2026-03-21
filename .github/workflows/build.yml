@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    name: Python 3.13
+    runs-on: ubuntu-latest
+    environment: build
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.13
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pipenv
+          python --version; pip --version; pipenv --version
+          pipenv requirements > requirements.txt
+          pip install -r requirements.txt
+      - name: Generate RSS
+        run: |
+          python rss.py > jobs.xml
