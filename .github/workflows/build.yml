@@ -24,6 +24,8 @@ jobs:
           python --version; pip --version; pipenv --version
           pipenv requirements > requirements.txt
           pip install -r requirements.txt
+      - name: Debug Env
+        run: printenv
       - name: Generate RSS
         run: |
           python rss.py > jobs.xml
