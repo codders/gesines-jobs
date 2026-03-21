@@ -17,9 +17,12 @@ class Job:
     def convert_location(self, ort_data):
         return ort_data['ort']
 
+    def get_title(self):
+        return f"{self.title} – {self.company} – {self.ort}" 
+
     def dump_job_text(self):
         print(f"{self.refnr} – {self.publish_date}")
-        print(f"{self.title} – {self.company} – {self.ort}")
+        print(self.get_title())
         if self.url is not None:
             print(self.url)
         print("")

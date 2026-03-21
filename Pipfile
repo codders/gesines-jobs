@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 requests = "*"
 flask = "*"
+feedgen = "*"
+dotenv = "*"
 
 [dev-packages]
 
