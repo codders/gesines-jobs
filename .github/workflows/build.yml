@@ -10,6 +10,11 @@ jobs:
     name: Python 3.13
     runs-on: ubuntu-latest
     environment: build
+    env:
+      RSS_ID_URL=${{ env.RSS_ID_URL }}
+      RSS_FEED_ALTERNATE_URL=${{ env.RSS_FEED_ALTERNATE_URL }}
+      RSS_FEED_AUTHOR_NAME=${{ env.RSS_FEED_AUTHOR_NAME }}
+      RSS_FEED_AUTHOR_EMAIL=${{ env.RSS_FEED_AUTHOR_EMAIL }}
 
     steps:
       - uses: actions/checkout@v3
