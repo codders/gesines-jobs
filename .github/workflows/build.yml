@@ -17,9 +17,9 @@ jobs:
       RSS_FEED_AUTHOR_EMAIL: ${{ vars.RSS_FEED_AUTHOR_EMAIL }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: 3.13
       - name: Install dependencies
@@ -29,8 +29,11 @@ jobs:
           python --version; pip --version; pipenv --version
           pipenv requirements > requirements.txt
           pip install -r requirements.txt
-      - name: Debug Env
-        run: printenv
       - name: Generate RSS
         run: |
           python rss.py > jobs.xml
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v6
+        with:
+          name: jobs-rss-xml
+          path: jobs.xml
