@@ -32,9 +32,9 @@ jobs:
       - name: Generate RSS
         id: build
         run: |
-          python rss.py > jobs.xml
+          python rss.py > output/jobs.xml
       - name: Upload generated RSS as artifact
         uses: actions/upload-pages-artifact@v3
         id: deployment
         with:
-          path: jobs.xml
+          path: output
