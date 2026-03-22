@@ -35,7 +35,7 @@ jobs:
           mkdir output
           python rss.py > output/jobs.xml
       - name: Upload generated RSS as artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         id: deployment
         with:
           path: output
