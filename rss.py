@@ -26,6 +26,8 @@ class FeedBuilder:
         job_url = job.url
         if job_url is not None:
             entry.link(href=job_url)
+        else:
+            entry.link(href=f"https://www.arbeitsagentur.de/jobsuche/jobdetail/{job.refnr}")
         entry.description(f"Matches {",".join(job.matches)} Published {job.publish_date}")
         entry.content(job.details)
 
