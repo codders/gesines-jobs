@@ -6,16 +6,16 @@ class Job:
 
     def __init__(self, job_response, job_details, matches):
         self.matches = matches
-        self.publish_date = job_response['aktuelleVeroeffentlichungsdatum']
-        self.refnr = job_response["refnr"]
-        self.title = job_response.get("titel") or job_response.get("bezeichnung") or job_response.get("stellenbezeichnung")
-        self.company = job_response.get("arbeitgeber") or job_response.get("firma")
-        self.ort = self.convert_location(job_response.get("arbeitsort") or job_response.get("arbeitsorte"))
+        self.publish_date = job_response['datumErsteVeroeffentlichung']
+        self.refnr = job_response["referenznummer"]
+        self.title = job_response.get("stellenangebotsTitel")
+        self.company = job_response.get("firma")
+        self.ort = self.convert_location(job_response.get("stellenlokationen"))
         self.url = job_response.get("externeURL") or job_details.get("externeURL")
         self.details = job_details['stellenangebotsBeschreibung']
 
     def convert_location(self, ort_data):
-        return ort_data['ort']
+        return ort_data[0]['adresse']['ort']
 
     def get_title(self):
         return f"{self.title} – {self.company} – {self.ort}" 
@@ -32,9 +32,9 @@ class Job:
 
 
 class JobSearcher:
-    BASE_URL = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v4"
+    BASE_URL = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v6"
     API_KEY = "jobboerse-jobsuche"
-    JOB_DETAILS_URL = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v3/jobdetails"
+    JOB_DETAILS_URL = "https://rest.arbeitsagentur.de/jobboerse/jobsuche-service/pc/v4/jobdetails"
 
     KEYWORDS = [
         'kommunikation',
@@ -124,7 +124,7 @@ class JobSearcher:
         return response.json()
 
     def build_job_from_response(self, job):
-        details = self.get_job_details(job["refnr"])
+        details = self.get_job_details(job["referenznummer"])
         matching = [ word for word in self.KEYWORDS if word in details['stellenangebotsBeschreibung'].lower().split() ]
         if len(matching) > 0:
             job_object = Job(job, details, matching)
@@ -135,7 +135,7 @@ class JobSearcher:
         jobs_response = self.search_jobs(where=where, what=what, page=1, size=20)
 
         return ( job for job in 
-            ( self.build_job_from_response(x) for x in jobs_response["stellenangebote"] )
+            ( self.build_job_from_response(x) for x in jobs_response["ergebnisliste"] )
             if job is not None )
 
     def run_job_search(self):
